@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "author": "RealNobser",
+  "editor": "wokwi",
+  "parts": [ 
+    { "type": "wokwi-arduino-mega", "id": "mega", "top": 190, "left": 90, "attrs": {} },
+    { "type": "wokwi-servo", "id": "servo1", "top": 0, "left": 0, "rotate": 270, "attrs": { "hornColor": "DarkBlue" } }
+  ],
+  "connections": [
+    [ "mega:GND.1", "servo1:GND", "black", [ "v-29", "h-1" ] ],
+    [ "mega:5V", "servo1:V+", "red", [ "v21", "h-174" ] ],
+    [ "mega:2", "servo1:PWM", "DarkMagenta", [ "v-13", "h-187" ] ]
+  ]
+}
+
