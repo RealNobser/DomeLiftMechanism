@@ -391,11 +391,12 @@ void loop()
                 {
                     if (strcmp(SerialBuffer, ":LI00") == 0)  // Lift All
                     {
-                        buttonPushCounter++;
-                        buttonPushCounter1++;
-                        buttonPushCounter2++;
-                        buttonPushCounter3++;
-                        buttonPushCounter4++;
+                        buttonPushCounter = 1;
+                        buttonPushCounter1= 1;
+                        buttonPushCounter2= 1;
+                        buttonPushCounter3= 1;
+                        buttonPushCounter4= 1;
+                        buttonPushCounter5= 1;
                     }
                     else if (strcmp(SerialBuffer, ":LI07") == 0)  // Lift Bad Motivator
                     {
@@ -416,6 +417,21 @@ void loop()
                     else if (strcmp(SerialBuffer, ":LI11") == 0)  // Lift Periscope
                     {
                         buttonPushCounter1++;
+                    }
+                    if (strcmp(SerialBuffer, ":LI99") == 0)  // Unlift All
+                    {
+                        buttonPushCounter  = 2;
+                        buttonPushCounter1 = 2;
+                        buttonPushCounter2 = 2;
+                        buttonPushCounter3 = 2;
+                        buttonPushCounter4 = 2;
+                        buttonPushCounter5 = 2;
+                    }                    
+                    else if (strcmp(SerialBuffer, ":L?") == 0)    // Check Module Presence
+                    {
+                        Wire.beginTransmission(BETTERDUINO_ADDRESS);
+                        Wire.write(":L?01\r");
+                        Wire.endTransmission();        
                     }
                     // TODO: Drink Server
                 }
@@ -695,6 +711,10 @@ void DomeZapperDown()
     switch (statezapdown) {
     case ZAP_MOVE_BOT:
         if (ZBotVal != LOW) {
+            Wire.beginTransmission(BETTERDUINO_ADDRESS);
+            Wire.write(":OP08\r");
+            Wire.write(":LK08\r");
+            Wire.endTransmission();            
             digitalWrite(ZIN1, LOW); //turn the dc motor on
             digitalWrite(ZIN2, HIGH);
             statezapdown = ZAP_BOT;
@@ -702,7 +722,7 @@ void DomeZapperDown()
         break;
     case ZAP_BOT:
         if (ZBotVal == LOW) {
-            digitalWrite(ZIN1, LOW); //turn the dc motor on
+            digitalWrite(ZIN1, LOW); //turn the dc motor off
             digitalWrite(ZIN2, LOW);
             if (digitalRead(ZBot) == LOW && digitalRead(ZTop) == HIGH) {
                 pwm.setPWM(1, 0, ZSERVOMIN); // close the pie panel
@@ -866,7 +886,6 @@ void LifeformUp()
                 Wire.write(":OP10\r");
                 Wire.write(":LK10\r");
                 Wire.endTransmission();
-
             }
             digitalWrite(LFIN1, HIGH); //turn the dc motor on
             digitalWrite(LFIN2, LOW);
@@ -887,6 +906,10 @@ void LifeformDown()
     switch (statelfdown) {
     case LF_MOVE_BOT:
         if (LFBotVal != LOW) {
+            Wire.beginTransmission(BETTERDUINO_ADDRESS);
+            Wire.write(":OP10\r");
+            Wire.write(":LK10\r");
+            Wire.endTransmission();
             digitalWrite(LFIN1, LOW); //turn the dc motor on
             digitalWrite(LFIN2, HIGH);
             statelfdown = LF_BOT;
@@ -894,7 +917,7 @@ void LifeformDown()
         break;
     case LF_BOT:
         if (LFBotVal == LOW) {
-            digitalWrite(LFIN1, LOW); //turn the dc motor on
+            digitalWrite(LFIN1, LOW); //turn the dc motor of
             digitalWrite(LFIN2, LOW);
             if (digitalRead(LFBot) == LOW && digitalRead(LFTop) == HIGH) {
                 pwm.setPWM(3, 0, LFSERVOMIN); // close the pie panel
@@ -973,7 +996,11 @@ void BadMotivatorDown()
     switch (statebmdown) {
     case BM_MOVE_BOT:
         if (BMBotVal != LOW) {
-
+            // Just to be sure
+            Wire.beginTransmission(BETTERDUINO_ADDRESS);
+            Wire.write(":OP07\r");
+            Wire.write(":LK07\r");
+            Wire.endTransmission();
             digitalWrite(BMIN1, LOW); //turn the dc motor on
             digitalWrite(BMIN2, HIGH);
             statebmdown = BM_BOT;
@@ -981,7 +1008,7 @@ void BadMotivatorDown()
         break;
     case BM_BOT:
         if (BMBotVal == LOW) {
-            digitalWrite(BMIN1, LOW); //turn the dc motor on
+            digitalWrite(BMIN1, LOW); //turn the dc motor off
             digitalWrite(BMIN2, LOW);
             if (digitalRead(BMBot) == LOW && digitalRead(BMTop) == HIGH) {
                 pwm.setPWM(0, 0, BMSERVOMIN); // close the pie panel
@@ -1026,7 +1053,11 @@ void LightsaberDown()
     switch (statelsdown) {
     case LS_MOVE_BOT:
         if (LSBotVal != LOW) {
-            digitalWrite(LSIN1, LOW); //turn the dc motor on
+            Wire.beginTransmission(BETTERDUINO_ADDRESS);
+            Wire.write(":OP09\r");
+            Wire.write(":LK09\r");
+            Wire.endTransmission();            
+            digitalWrite(LSIN1, LOW); //turn the dc motor off
             digitalWrite(LSIN2, HIGH);
             statelsdown = LS_BOT;
         }
@@ -1078,6 +1109,10 @@ void DrinkServerDown()
     switch (statedsdown) {
     case DS_MOVE_BOT:
         if (DSBotVal != LOW) {
+            Wire.beginTransmission(BETTERDUINO_ADDRESS);
+            Wire.write(":OP11\r");
+            Wire.write(":LK11\r");
+            Wire.endTransmission();
             digitalWrite(DSIN1, LOW); //turn the dc motor on
             digitalWrite(DSIN2, HIGH);
             statedsdown = DS_BOT;
@@ -1086,7 +1121,7 @@ void DrinkServerDown()
     case DS_BOT:
         if (DSBotVal == LOW) {
 
-            digitalWrite(DSIN1, LOW); //turn the dc motor on
+            digitalWrite(DSIN1, LOW); //turn the dc motor off
             digitalWrite(DSIN2, LOW);
             if (digitalRead(DSBot) == LOW && digitalRead(DSTop) == HIGH) {
                 pwm.setPWM(12, 0, DSSERVOMIN); // close the pie panel
