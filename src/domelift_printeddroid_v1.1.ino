@@ -710,11 +710,7 @@ void DomeZapperDown()
 { // this function is for the dome zapper
     switch (statezapdown) {
     case ZAP_MOVE_BOT:
-        if (ZBotVal != LOW) {
-            Wire.beginTransmission(BETTERDUINO_ADDRESS);
-            Wire.write(":OP08\r");
-            Wire.write(":LK08\r");
-            Wire.endTransmission();            
+        if (ZBotVal != LOW) {    
             digitalWrite(ZIN1, LOW); //turn the dc motor on
             digitalWrite(ZIN2, HIGH);
             statezapdown = ZAP_BOT;
@@ -906,10 +902,6 @@ void LifeformDown()
     switch (statelfdown) {
     case LF_MOVE_BOT:
         if (LFBotVal != LOW) {
-            Wire.beginTransmission(BETTERDUINO_ADDRESS);
-            Wire.write(":OP10\r");
-            Wire.write(":LK10\r");
-            Wire.endTransmission();
             digitalWrite(LFIN1, LOW); //turn the dc motor on
             digitalWrite(LFIN2, HIGH);
             statelfdown = LF_BOT;
@@ -996,11 +988,6 @@ void BadMotivatorDown()
     switch (statebmdown) {
     case BM_MOVE_BOT:
         if (BMBotVal != LOW) {
-            // Just to be sure
-            Wire.beginTransmission(BETTERDUINO_ADDRESS);
-            Wire.write(":OP07\r");
-            Wire.write(":LK07\r");
-            Wire.endTransmission();
             digitalWrite(BMIN1, LOW); //turn the dc motor on
             digitalWrite(BMIN2, HIGH);
             statebmdown = BM_BOT;
@@ -1052,12 +1039,8 @@ void LightsaberDown()
 { // this function lowers the Lightsaber
     switch (statelsdown) {
     case LS_MOVE_BOT:
-        if (LSBotVal != LOW) {
-            Wire.beginTransmission(BETTERDUINO_ADDRESS);
-            Wire.write(":OP09\r");
-            Wire.write(":LK09\r");
-            Wire.endTransmission();            
-            digitalWrite(LSIN1, LOW); //turn the dc motor off
+        if (LSBotVal != LOW) {      
+            digitalWrite(LSIN1, LOW); //turn the dc motor on
             digitalWrite(LSIN2, HIGH);
             statelsdown = LS_BOT;
         }
@@ -1109,10 +1092,6 @@ void DrinkServerDown()
     switch (statedsdown) {
     case DS_MOVE_BOT:
         if (DSBotVal != LOW) {
-            Wire.beginTransmission(BETTERDUINO_ADDRESS);
-            Wire.write(":OP11\r");
-            Wire.write(":LK11\r");
-            Wire.endTransmission();
             digitalWrite(DSIN1, LOW); //turn the dc motor on
             digitalWrite(DSIN2, HIGH);
             statedsdown = DS_BOT;
